@@ -1,5 +1,6 @@
 # game console Icon made by "https://www.freepik.com" (title="Freepik") from "https://www.flaticon.com/" (title="Flaticon"-www.flaticon.com)
 __author__ = 'AkhilanY'
+__version__ = '1.0'
 
 import tkinter as tk
 from tkinter import ttk
