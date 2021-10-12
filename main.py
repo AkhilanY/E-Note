@@ -8,6 +8,9 @@ from tkinter import filedialog,messagebox,scrolledtext,font,colorchooser
 import datetime as dt
 import time
 from os import path
+import os
+import markdown
+import webbrowser
 
 class TextEditor(tk.Tk):
 
@@ -136,13 +139,13 @@ class TextEditor(tk.Tk):
         # view menu
 
         self.viewmenu = tk.Menu(master=self.mainmenu,tearoff=0)
-
+        self.viewmenu.add_command(label='convert to html',command=self.md2html)
         # zoom submenu
 
         self.zoommenu = tk.Menu(master=self.viewmenu,tearoff=0)
         self.zoommenu.add_command(label='Zoom In',command=self.zoom_in,accelerator='Ctrl +')
         self.zoommenu.add_command(label='Zoom Out     ',command=self.zoom_out,accelerator='Ctrl -')
-        
+
         self.viewmenu.add_cascade(label='Zoom',menu=self.zoommenu)
 
         # editor config
@@ -234,14 +237,14 @@ class TextEditor(tk.Tk):
         self.file.close()
 
         # changing title
-
-        self.title(f'{self.f[self.f.rfind("/")+1:]} - E-NOTE')        
+        self.fname = f'{self.f[self.f.rfind("/")+1:]}'
+        self.title(f'{self.fname} - E-NOTE')        
 
     def openfile(self,*keyshort):
 
         # path for opening file
 
-        filetobeopened=tk.filedialog.askopenfilename(title='Open',initialdir='/',filetypes=(('Text File',".txt"),('All Files',".")))
+        filetobeopened=tk.filedialog.askopenfilename(title='Open',initialdir='/',filetypes=(('Text File',"*.txt"),('All Files',"*.*")))
         
         # returning nothing if no path,to escape exception 
 
@@ -263,8 +266,8 @@ class TextEditor(tk.Tk):
         self.file.close()
 
         # changing title
-
-        self.title(f'{self.f[self.f.rfind("/")+1:]} - E-NOTE')
+        self.fname = f'{self.f[self.f.rfind("/")+1:]}'
+        self.title(f'{self.fname} - E-NOTE')
 
     def newfile(self,*keyshort):
 
@@ -773,6 +776,30 @@ class TextEditor(tk.Tk):
         bg = colorchooser.askcolor(title='Editor Background Color')
         self.texteditor.config(bg=bg[1])
         self.ed_bg=bg[1]
-            
+
+    def md2html(self):
+
+        if not '.md' in self.f:
+            messagebox.showerror(title='Markdown view error',message='The file is not a markdown file')
+        
+        else:
+            self.save()
+            with open(self.f,'r+') as file:
+                txt = file.read()
+                html = markdown.markdown(txt)
+                self.save_html(html)
+                
+                
+
+    def save_html(self,html):
+        file = filedialog.asksaveasfilename(title='Save As',initialdir='/',defaultextension=".html",filetypes=(('html files',"*.html"),('html files',"*.htm")))
+        if not file:
+            return
+        
+        with open(file,'w') as file:
+            file.write(html)
+            file.close()
+
 app=TextEditor()
 app.mainloop()
+
