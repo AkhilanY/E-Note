@@ -194,7 +194,7 @@ class TextEditor(tk.Tk):
         self.sizegrip = ttk.Sizegrip(self.statusbar)
         self.sizegrip.grid(row=0,column=9,sticky=tk.SE)
    
-    ######################################################################################
+######################################################################################
 
     def save(self,*keyshort):
 
@@ -216,7 +216,7 @@ class TextEditor(tk.Tk):
 
         # path of file
 
-        filetobesaved=tk.filedialog.asksaveasfilename(title='Save As',initialdir='/',defaultextension=".txt",filetypes=(('Text Files',".txt"),('All Files',".")))        
+        filetobesaved=tk.filedialog.asksaveasfilename(title='Save As',initialdir='/',defaultextension=".txt",filetypes=(('Text Files',".txt"),('All Files',"*.*")))        
 
         # returing nothing to escape exception
 
@@ -789,8 +789,6 @@ class TextEditor(tk.Tk):
                 html = markdown.markdown(txt)
                 self.save_html(html)
                 
-                
-
     def save_html(self,html):
         file = filedialog.asksaveasfilename(title='Save As',initialdir='/',defaultextension=".html",filetypes=(('html files',"*.html"),('html files',"*.htm")))
         if not file:
